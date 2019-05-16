@@ -22,8 +22,8 @@ type DocumentBase struct {
 	connection *Connection     `json:"-" bson:"-"`
 
 	Id        bson.ObjectId `json:"id" bson:"_id,omitempty"`
-	CreatedAt time.Time     `json:"createdAt" bson:"createdAt"`
-	UpdatedAt time.Time     `json:"updatedAt" bson:"updatedAt"`
+	CreatedAt time.Time     `json:"-" bson:"createdAt"`
+	UpdatedAt time.Time     `json:"-" bson:"updatedAt"`
 	Deleted   bool          `json:"-" bson:"deleted"`
 }
 
