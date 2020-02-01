@@ -9,6 +9,7 @@ import (
 	"strconv"
 	"strings"
 	"time"
+	"unicode"
 
 	"github.com/globalsign/mgo"
 	"github.com/globalsign/mgo/bson"
@@ -101,6 +102,12 @@ func (self *DocumentBase) DefaultValidate() (bool, []error) {
 		field := fieldType.Field(fieldIndex)
 		fieldTag := field.Tag
 
+		fieldName := fieldType.Field(fieldIndex).Name
+		fieldElem := documentValue.Field(fieldIndex)
+		if unicode.IsLower([]rune(fieldName)[0]) {
+			continue
+		}
+
 		validation := strings.ToLower(fieldTag.Get("validation"))
 		validationName := fieldTag.Get("json")
 
@@ -109,9 +116,6 @@ func (self *DocumentBase) DefaultValidate() (bool, []error) {
 		requiredTag := fieldTag.Get("required")
 		modelTag := fieldTag.Get("model")
 		relationTag := fieldTag.Get("relation") // Reference relation, e.g. one-to-one or one-to-many
-
-		fieldName := fieldType.Field(fieldIndex).Name
-		fieldElem := documentValue.Field(fieldIndex)
 
 		// Get element of field by checking if pointer or copy
 		if fieldElem.Kind() == reflect.Ptr || fieldElem.Kind() == reflect.Interface {
